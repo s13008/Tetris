@@ -8,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by s13012 on 14/08/07.
- */
+
 public class PlayGameActivity extends Activity{
     public PlayGameActivity(){
         Log.v("PlayGame", "PlayGame");
