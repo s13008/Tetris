@@ -1,7 +1,30 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    tools:ignore="MergeRootFrame" />
+    android:orientation="vertical"
+    tools:ignore="MergeRootFrame"
+    android:weightSum="1">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Tetris"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="50dp"
+        android:layout_marginTop="100dp" />
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="239dp"
+        android:name="jp.ac.it_college.std.s13012.androidchallenge.MainActivity$PlaceholderFragment"
+        android:id="@+id/start_fragment"
+        android:layout_weight="0.18" />
+
+
+</LinearLayout>
