@@ -21,10 +21,9 @@
 
     <fragment
         android:layout_width="match_parent"
-        android:layout_height="239dp"
+        android:layout_height="match_parent"
         android:name="jp.ac.it_college.std.s13012.androidchallenge.MainActivity$PlaceholderFragment"
-        android:id="@+id/start_fragment"
-        android:layout_weight="0.18" />
+        android:id="@+id/start_fragment" />
 
 
 </LinearLayout>

@@ -41,6 +41,7 @@ public class MainActivity extends Activity {
                     DifficultyFragment fragment = DifficultyFragment.newInstance();
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.replace(R.id.start_fragment, fragment);
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     ft.commit();
                     startButton.setVisibility(View.INVISIBLE);
                 }
@@ -113,7 +114,7 @@ public class MainActivity extends Activity {
         }
 
         private void difficultySelect(String difficulty) {
-            Intent intent = new Intent(getActivity(), PlayGameActivity.class);
+            Intent intent = new Intent(getActivity(), TetrisActivity.class);
             intent.putExtra("Difficulty", difficulty);
             startActivity(intent);
         }
