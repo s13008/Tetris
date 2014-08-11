@@ -10,7 +10,10 @@ public class TetrisActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tetris);
+//        setContentView(R.layout.activity_tetris);
+//        setContentView(new Board(this));
+        setContentView(new Block(this));
+
         Log.v("PlayGame", getIntent().getStringExtra("Difficulty"));
     }
 

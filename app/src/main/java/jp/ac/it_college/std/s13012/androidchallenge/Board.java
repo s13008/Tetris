@@ -19,21 +19,22 @@ public class Board extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        /*ShapeDrawable rect = new ShapeDrawable(new RectShape());
+        ShapeDrawable rect = new ShapeDrawable(new RectShape());
         rect.setBounds(0, 0, 210, 410);
         //ボード枠
-        rect.getPaint().setColor(0xFF000000);
+        rect.getPaint().setColor(Color.BLACK);
         rect.draw(canvas);
         canvas.translate(5, 5);
-        rect.setBounds(0, 0, 200, 400);
         //ボード背景
-        rect.getPaint().setColor(0xFFFFFFFF);
+        rect.setBounds(0, 0, 200, 400);
+        rect.getPaint().setColor(Color.CYAN);
         rect.draw(canvas);
-*/
-        Paint paint = new Paint();
+        /*Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(0,0,200,400,paint);
+        canvas.drawRect(0,0,200,400,paint);*/
+
+
     }
 }

@@ -7,7 +7,7 @@
     <!-- TODO: Update blank fragment layout -->
 
         <Button
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="EASY"
             android:id="@+id/easy_button"
@@ -16,7 +16,7 @@
              />
 
         <Button
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="NORMAL"
             android:id="@+id/normal_button"
@@ -25,7 +25,7 @@
              />
 
         <Button
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="HARD"
             android:id="@+id/hard_button"
