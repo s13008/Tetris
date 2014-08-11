@@ -3,7 +3,6 @@ package jp.ac.it_college.std.s13012.androidchallenge;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 
