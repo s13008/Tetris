@@ -11,9 +11,6 @@ public class TetrisActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tetris);
-        LinearLayout layout = (LinearLayout)findViewById(R.id.tetris);
-
-        layout.addView(new Board(this));
         Log.v("PlayGame", getIntent().getStringExtra("Difficulty"));
     }
 

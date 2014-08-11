@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,31 +6,30 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TableLayout
-        android:layout_width="150dp"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center">
-
         <Button
-            android:layout_width="108dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="EASY"
             android:id="@+id/easy_button"
-            android:layout_gravity="center" />
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+             />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="NORMAL"
             android:id="@+id/normal_button"
-            android:layout_gravity="center" />
+            android:layout_centerInParent="true"
+            android:layout_below="@id/easy_button"
+             />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="HARD"
             android:id="@+id/hard_button"
-            android:layout_gravity="center" />
-    </TableLayout>
+            android:layout_centerInParent="true"
+            android:layout_below="@id/normal_button"/>
 
-</FrameLayout>
+</RelativeLayout>

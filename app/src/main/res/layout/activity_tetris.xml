@@ -7,25 +7,4 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:id="@+id/tetris"
-        android:layout_gravity="left|top">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="GameActivity"
-            android:id="@+id/textView"
-            android:layout_gravity="top" />
-    </LinearLayout>
-
-    <FrameLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|top"></FrameLayout>
 </LinearLayout>
