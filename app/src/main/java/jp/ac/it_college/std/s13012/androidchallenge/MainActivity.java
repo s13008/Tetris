@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
         return false;
     }
 
-    public static class DifficultyFragment extends Fragment {
+    public static class DifficultyFragment extends Fragment implements View.OnClickListener{
         public static DifficultyFragment newInstance() {
             DifficultyFragment fragment = new DifficultyFragment();
             return fragment;
@@ -88,28 +88,10 @@ public class MainActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_difficulty, container, false);
 
-            Button easyButton = (Button) rootView.findViewById(R.id.easy_button);
-            Button normalButton = (Button) rootView.findViewById(R.id.normal_button);
-            Button hardButton = (Button) rootView.findViewById(R.id.hard_button);
+            rootView.findViewById(R.id.easy_button).setOnClickListener(this);
+            rootView.findViewById(R.id.normal_button).setOnClickListener(this);
+            rootView.findViewById(R.id.hard_button).setOnClickListener(this);
 
-            easyButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    difficultySelect("EASY");
-                }
-            });
-            normalButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    difficultySelect("NORMAL");
-                }
-            });
-            hardButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    difficultySelect("HARD");
-                }
-            });
             return rootView;
         }
 
@@ -117,6 +99,21 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(getActivity(), TetrisActivity.class);
             intent.putExtra("Difficulty", difficulty);
             startActivity(intent);
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.easy_button:
+                 difficultySelect("EASY");
+                    break;
+                case R.id.normal_button:
+                    difficultySelect("NORMAL");
+                    break;
+                case R.id.hard_button:
+                    difficultySelect("HARD");
+                    break;
+            }
         }
     }
 }
