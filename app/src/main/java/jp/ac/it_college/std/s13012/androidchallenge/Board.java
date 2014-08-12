@@ -21,13 +21,13 @@ public class Board extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         ShapeDrawable rect = new ShapeDrawable(new RectShape());
-        rect.setBounds(0, 0, canvas.getWidth() / 3, canvas.getHeight());
+        rect.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         //ボード枠
         rect.getPaint().setColor(Color.BLACK);
         rect.draw(canvas);
 //        canvas.translate(5, 5);
         //ボード背景
-        rect.setBounds(0, 0, canvas.getWidth() / 3 - 10, canvas.getHeight() - 10);
+        rect.setBounds(0, 0, canvas.getWidth() - 10, canvas.getHeight() - 10);
         rect.getPaint().setColor(Color.CYAN);
         rect.draw(canvas);
     }
