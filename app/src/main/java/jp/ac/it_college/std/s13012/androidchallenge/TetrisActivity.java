@@ -14,11 +14,11 @@ public class TetrisActivity extends Activity{
         //難易度によってブロックの落下速度を調整
         String difficulty = getIntent().getStringExtra("Difficulty");
         if (difficulty.equals("EASY")) {
-            Block.setFallVelocity(1000);
+            Block.setFallVelocity(100);
         } else if (difficulty.equals("NORMAL")) {
-            Block.setFallVelocity(800);
+            Block.setFallVelocity(50);
         } else if (difficulty.equals("HARD")) {
-            Block.setFallVelocity(500);
+            Block.setFallVelocity(30);
         }
         Log.v("Difficulty", getIntent().getStringExtra("Difficulty"));
     }

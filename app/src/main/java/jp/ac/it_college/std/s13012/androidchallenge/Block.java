@@ -3,7 +3,6 @@ package jp.ac.it_college.std.s13012.androidchallenge;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.util.Log;
@@ -69,7 +68,8 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     static boolean mIsAttached;
     Canvas mCanvas = null;
     static int fallVelocity;
-    private int FPS = 30;
+    static int frame;
+
 
 
     public Block(Context context) {
@@ -177,6 +177,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        frame = 0;
         mIsAttached = true;
         mThread = new Thread(this);
         mThread.start();
@@ -201,21 +202,21 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
             mCanvas.drawColor(Color.BLACK);
             drawMatrix(block, posx, posy, Color.RED);
             drawMatrix(map, 0, 0, Color.GRAY);
-            dropBlock();
+            if (frame % fallVelocity == 0) {
+                Log.v("frame", Integer.toString(frame));
+                dropBlock();
+            }
+            frame++;
             getHolder().unlockCanvasAndPost(mCanvas);
         }
     }
 
     public void dropBlock() {
-        try {
-            mThread.sleep(fallVelocity);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         if (check(block, posx, posy + 1)) {
             posy++;
         } else {
-            posx = mapWidth / 2; posy = 0;
+            posx = mapWidth / 2;
+            posy = 0;
             block = blocks[mRand.nextInt(blocks.length)];
         }
     }
