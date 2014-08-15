@@ -69,6 +69,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     static boolean mIsAttached;
     Canvas mCanvas = null;
     static int fallVelocity;
+    private int FPS = 30;
 
 
     public Block(Context context) {
@@ -134,6 +135,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     @Override
     public boolean onDown(MotionEvent motionEvent) {
         return true;
+
     }
 
     @Override
@@ -156,7 +158,6 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
 
     @Override
     public void onLongPress(MotionEvent motionEvent) {
-
     }
 
     @Override
@@ -213,6 +214,9 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         }
         if (check(block, posx, posy + 1)) {
             posy++;
+        } else {
+            posx = mapWidth / 2; posy = 0;
+            block = blocks[mRand.nextInt(blocks.length)];
         }
     }
 
@@ -255,7 +259,9 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         while (check(block, posx, y)) {
             y++;
         }
-        if (y > 0) posy = y - 1;
+        if (y > 0) {
+            posy = y - 1;
+        }
         return true;
     }
 

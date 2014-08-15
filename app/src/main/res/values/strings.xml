@@ -5,5 +5,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_title">TETRIS</string>
+    <string name="text_easy">EASY</string>
+    <string name="text_normal">NORMAL</string>
+    <string name="text_hard">HARD</string>
 
 </resources>
