@@ -56,19 +56,24 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
 
     Random mRand = new Random(System.currentTimeMillis());
 
-    int[][] block = blocks[mRand.nextInt(blocks.length)];
-    int mapWidth = 12;
-    int mapHeight = 21;
-    public int posx = mapWidth / 2, posy;
-    int[][] map = new int[mapHeight][];
+    private int[][] block = blocks[mRand.nextInt(blocks.length)];
+    private int mapWidth = 12;
+    private int mapHeight = 21;
+    private int posx = mapWidth / 2, posy;
+    private int[][] blockMap = new int[mapHeight][];
     private final static int BLOCK_SIZE = 53;
-    GestureDetector gestureDetector;
-    static Thread mThread;
+    private GestureDetector gestureDetector;
+    protected static Thread mThread;
     private SurfaceHolder mHolder;
-    static boolean mIsAttached;
-    Canvas mCanvas = null;
-    static int fallVelocity;
-    static int frame;
+    public static boolean mIsAttached;
+    private Canvas mCanvas = null;
+    public static int fallVelocity;
+    public static int frame;
+    private final int[] COLORS = {Color.RED, Color.YELLOW,
+            Color.MAGENTA, Color.GREEN,
+            Color.BLUE, Color.argb(255,243,152,0),
+            Color.CYAN};
+    private int blockColor;
 
 
 
@@ -99,6 +104,48 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         }
     }
 
+    void clearRows() {
+        // 埋まった行は消す。nullで一旦マーキング
+        for (int y = 0; y < mapHeight - 1; y++) {
+            boolean full = true;
+            for (int x = 1; x < mapWidth - 1; x++) {
+                if (blockMap[y][x] == 0) {
+                    full = false;
+                    break;
+                }
+            }
+
+            if (full) {
+                blockMap[y] = null;
+            }
+        }
+
+        // 新しいmapにnull以外の行を詰めてコピーする
+        int[][] newMap = new int[mapHeight][];
+        int y2 = mapHeight - 1;
+        for (int y = mapHeight - 1; y >= 0; y--) {
+            if (blockMap[y] == null) {
+                continue;
+            } else {
+                newMap[y2--] = blockMap[y];
+            }
+        }
+
+        // 消えた行数分新しい行を追加する
+        for (int i = 0; i <= y2; i++) {
+            int[] newRow = new int[mapWidth];
+            for (int j = 0; j < mapWidth; j++) {
+                if (j == 0 || j == mapWidth - 1) {
+                    newRow[j] = 1;
+                } else {
+                    newRow[j] = 0;
+                }
+            }
+            newMap[i] = newRow;
+        }
+        blockMap = newMap;
+    }
+
     int[][] rotate(final int[][] block) {
         int[][] rotated = new int[block[0].length][];
         for (int x = 0; x < block[0].length; x++) {
@@ -119,7 +166,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         }
         for (int y = 0; y < block.length; y++) {
             for (int x = 0; x < block[y].length; x++) {
-                if (block[y][x] != 0 && map[y + offsety][x + offsetx] != 0) {
+                if (block[y][x] != 0 && blockMap[y + offsety][x + offsetx] != 0) {
                     return false;
                 }
             }
@@ -177,6 +224,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        blockColor = COLORS[mRand.nextInt(COLORS.length)];
         frame = 0;
         mIsAttached = true;
         mThread = new Thread(this);
@@ -195,15 +243,17 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
 
     }
 
+
+
+
     @Override
     public void run() {
         while (mIsAttached) {
             mCanvas = getHolder().lockCanvas();
             mCanvas.drawColor(Color.BLACK);
-            drawMatrix(block, posx, posy, Color.RED);
-            drawMatrix(map, 0, 0, Color.GRAY);
+            drawMatrix(block, posx, posy, blockColor);
+            drawMatrix(blockMap, 0, 0, Color.GRAY);
             if (frame % fallVelocity == 0) {
-                Log.v("frame", Integer.toString(frame));
                 dropBlock();
             }
             frame++;
@@ -215,9 +265,26 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         if (check(block, posx, posy + 1)) {
             posy++;
         } else {
+            mergeMatrix(block, posx, posy);
+            gameOver(blockMap);
+            clearRows();
             posx = mapWidth / 2;
             posy = 0;
             block = blocks[mRand.nextInt(blocks.length)];
+            blockColor = COLORS[mRand.nextInt(COLORS.length)];
+        }
+    }
+
+    public void gameOver(int[][] map){
+    }
+
+    void mergeMatrix(int[][] block, int offsetx, int offsety) {
+        for (int y = 0; y < block.length; y ++) {
+            for (int x = 0; x < block[0].length; x ++) {
+                if (block[y][x] != 0) {
+                    blockMap[offsety + y][offsetx + x] = block[y][x];
+                }
+            }
         }
     }
 
@@ -238,12 +305,12 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
 
     public void initGame() {
         for (int y = 0; y < mapHeight; y++) {
-            map[y] = new int[mapWidth];
+            blockMap[y] = new int[mapWidth];
             for (int x = 0; x < mapWidth; x++) {
                 //マップの外枠に色を塗る
                 if (y == mapHeight - 1 || x == mapWidth - 1
                         || x == 0) {
-                    map[y][x] = 1;
+                    blockMap[y][x] = 1;
                 }
             }
         }
