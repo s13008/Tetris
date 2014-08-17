@@ -1,6 +1,7 @@
 package jp.ac.it_college.std.s13012.androidchallenge;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -29,4 +30,6 @@ public class TetrisActivity extends Activity{
         super.onPause();
         Block.finishLoop();
     }
+
+
 }

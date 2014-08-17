@@ -260,7 +260,6 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
 
             frame++;
             getHolder().unlockCanvasAndPost(mCanvas);
-
             if (gameOver()){
                 Intent intent = new Intent(getContext(),ResultActivity.class);
                 getContext().startActivity(intent);

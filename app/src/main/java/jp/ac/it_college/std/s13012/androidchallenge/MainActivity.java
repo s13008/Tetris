@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +57,7 @@ public class MainActivity extends Activity {
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    finish();
+                                    moveTaskToBack(true);
                                 }
                             }
                     )
@@ -72,6 +73,8 @@ public class MainActivity extends Activity {
         }
         return false;
     }
+
+
 
     public static class DifficultyFragment extends Fragment implements View.OnClickListener{
         public static DifficultyFragment newInstance() {

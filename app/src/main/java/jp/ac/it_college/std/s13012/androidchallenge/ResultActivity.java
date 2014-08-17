@@ -19,8 +19,8 @@ public class ResultActivity extends Activity {
         if (keyCode == event.KEYCODE_BACK){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-            finish();
+            return true;
         }
-        return true;
+       return false;
     }
 }
