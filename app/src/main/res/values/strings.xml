@@ -9,5 +9,7 @@
     <string name="text_easy">EASY</string>
     <string name="text_normal">NORMAL</string>
     <string name="text_hard">HARD</string>
+    <string name="title_activity_result">ResultActivity</string>
+    <string name="text_gameover">GAME OVER</string>
 
 </resources>

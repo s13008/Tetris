@@ -1,11 +1,11 @@
 package jp.ac.it_college.std.s13012.androidchallenge;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -161,7 +161,6 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         if (offsetx < 0 || offsety < 0 ||
                 mapHeight - 1 < offsety + block.length ||
                 mapWidth - 1 < offsetx + block[0].length) {
-            Log.v("check", "true");
             return false;
         }
         for (int y = 0; y < block.length; y++) {
@@ -266,16 +265,23 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
             posy++;
         } else {
             mergeMatrix(block, posx, posy);
-            gameOver(blockMap);
             clearRows();
             posx = mapWidth / 2;
             posy = 0;
+            if (gameOver()){
+                Intent intent = new Intent(getContext(),ResultActivity.class);
+                getContext().startActivity(intent);
+            }
             block = blocks[mRand.nextInt(blocks.length)];
             blockColor = COLORS[mRand.nextInt(COLORS.length)];
         }
     }
 
-    public void gameOver(int[][] map){
+    public boolean gameOver(){
+        if(posy == 0 && !check(block, posx, posy)){
+            return true;
+        }
+        return false;
     }
 
     void mergeMatrix(int[][] block, int offsetx, int offsety) {

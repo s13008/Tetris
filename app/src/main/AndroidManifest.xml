@@ -10,8 +10,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,10 +18,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".TetrisActivity"
+        <activity
+            android:name=".TetrisActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".ResultActivity"
+            android:label="@string/title_activity_result"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
