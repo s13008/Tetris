@@ -250,13 +250,22 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         while (mIsAttached) {
             mCanvas = getHolder().lockCanvas();
             mCanvas.drawColor(Color.BLACK);
+
             drawMatrix(block, posx, posy, blockColor);
             drawMatrix(blockMap, 0, 0, Color.GRAY);
+
             if (frame % fallVelocity == 0) {
                 dropBlock();
             }
+
             frame++;
             getHolder().unlockCanvasAndPost(mCanvas);
+
+            if (gameOver()){
+                Intent intent = new Intent(getContext(),ResultActivity.class);
+                getContext().startActivity(intent);
+            }
+
         }
     }
 
@@ -268,10 +277,6 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
             clearRows();
             posx = mapWidth / 2;
             posy = 0;
-            if (gameOver()){
-                Intent intent = new Intent(getContext(),ResultActivity.class);
-                getContext().startActivity(intent);
-            }
             block = blocks[mRand.nextInt(blocks.length)];
             blockColor = COLORS[mRand.nextInt(COLORS.length)];
         }
