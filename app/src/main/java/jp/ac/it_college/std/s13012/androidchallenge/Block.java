@@ -7,9 +7,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.Random;
 
@@ -61,7 +66,8 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     private int mapHeight = 21;
     private int posx = mapWidth / 2, posy;
     private int[][] blockMap = new int[mapHeight][];
-    private final static int BLOCK_SIZE = 53;
+    private final static int BLOCK_WIDTH = 45;
+    private final static int BLOCK_HEIGHT = 53;
     private GestureDetector gestureDetector;
     protected static Thread mThread;
     private SurfaceHolder mHolder;
@@ -74,7 +80,6 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
             Color.BLUE, Color.argb(255,243,152,0),
             Color.CYAN};
     private int blockColor;
-
 
 
     public Block(Context context) {
@@ -95,9 +100,9 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 if (matrix[y][x] != 0) {
-                    int px = (x + offsetx) * BLOCK_SIZE;
-                    int py = (y + offsety) * BLOCK_SIZE;
-                    rect.setBounds(px, py, px + BLOCK_SIZE, py + BLOCK_SIZE);
+                    int px = (x + offsetx) * BLOCK_WIDTH;
+                    int py = (y + offsety) * BLOCK_HEIGHT;
+                    rect.setBounds(px, py, px + BLOCK_WIDTH, py + BLOCK_HEIGHT);
                     rect.draw(mCanvas);
                 }
             }
@@ -221,6 +226,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         return true;
     }
 
+
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         blockColor = COLORS[mRand.nextInt(COLORS.length)];
@@ -243,8 +249,6 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     }
 
 
-
-
     @Override
     public void run() {
         while (mIsAttached) {
@@ -264,7 +268,6 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
                 Intent intent = new Intent(getContext(),ResultActivity.class);
                 getContext().startActivity(intent);
             }
-
         }
     }
 
@@ -321,6 +324,8 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
                 if (y == mapHeight - 1 || x == mapWidth - 1
                         || x == 0) {
                     blockMap[y][x] = 1;
+                } else {
+                    blockMap[y][x] = 0;
                 }
             }
         }

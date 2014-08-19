@@ -4,13 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 public class TetrisActivity extends Activity{
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new Block(this));
+        setContentView(R.layout.activity_tetris);
+        LinearLayout layout = (LinearLayout)findViewById(R.id.game_layout);
+        layout.addView(new Block(this));
+
 
         //難易度によってブロックの落下速度を調整
         String difficulty = getIntent().getStringExtra("Difficulty");
@@ -23,6 +29,7 @@ public class TetrisActivity extends Activity{
         }
         Log.v("Difficulty", getIntent().getStringExtra("Difficulty"));
     }
+
 
     @Override
     protected void onPause() {
