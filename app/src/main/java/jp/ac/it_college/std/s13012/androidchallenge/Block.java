@@ -8,7 +8,6 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -76,11 +75,21 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     public static int frame;
     private final int[] COLORS = {Color.RED, Color.YELLOW,
             Color.MAGENTA, Color.GREEN,
-            Color.BLUE, Color.argb(255,243,152,0),
+            Color.BLUE, Color.rgb(243,152,0),
             Color.CYAN};
     private int blockColor;
     private TextView scoreText;
     private int score = 0;
+    private static boolean isStop = false;
+    private static int mDifficulty;
+    private static final int EASY = 0;
+    private static final int NORMAL = 1;
+    private static final int HARD = 2;
+    private final int EASY_SCORE = 100;
+    private final int NORMAL_SCORE = 200;
+    private final int HARD_SCORE = 300;
+    private int[][] nextBlock;
+
 
 
     public Block(Context context) {
@@ -149,7 +158,17 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
                 }
             }
             newMap[i] = newRow;
-            mHandler.sendEmptyMessage(100);
+            switch (mDifficulty){
+                case EASY:
+                    mHandler.sendEmptyMessage(EASY_SCORE);
+                    break;
+                case NORMAL:
+                    mHandler.sendEmptyMessage(NORMAL_SCORE);
+                    break;
+                case HARD:
+                    mHandler.sendEmptyMessage(HARD_SCORE);
+                    break;
+            }
         }
         blockMap = newMap;
     }
@@ -232,6 +251,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        mHandler.sendEmptyMessage(0);
         blockColor = COLORS[mRand.nextInt(COLORS.length)];
         frame = 0;
         mIsAttached = true;
@@ -255,21 +275,23 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     @Override
     public void run() {
         while (mIsAttached) {
-            mCanvas = getHolder().lockCanvas();
-            mCanvas.drawColor(Color.BLACK);
+            if (!isStop) {
+                mCanvas = getHolder().lockCanvas();
+                mCanvas.drawColor(Color.BLACK);
 
-            drawMatrix(block, posx, posy, blockColor);
-            drawMatrix(blockMap, 0, 0, Color.GRAY);
+                drawMatrix(block, posx, posy, blockColor);
+                drawMatrix(blockMap, 0, 0, Color.GRAY);
 
-            if (frame % fallVelocity == 0) {
-                dropBlock();
-            }
+                if (frame % fallVelocity == 0) {
+                    dropBlock();
+                }
 
-            frame++;
-            getHolder().unlockCanvasAndPost(mCanvas);
-            if (gameOver()){
-                Intent intent = new Intent(getContext(),ResultActivity.class);
-                getContext().startActivity(intent);
+                frame++;
+                getHolder().unlockCanvasAndPost(mCanvas);
+                if (gameOver()) {
+                    Intent intent = new Intent(getContext(), ResultActivity.class);
+                    getContext().startActivity(intent);
+                }
             }
         }
     }
@@ -304,19 +326,38 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         }
     }
 
-    public static void finishLoop() {
-        synchronized (mThread) {
+    public static void stopLoop() {
+        isStop = !isStop;
+    }
+
+    public static void finishLoop(){
+        synchronized (mThread){
             mIsAttached = false;
         }
+
         try {
             mThread.join();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+
+
     }
 
-    public static void setFallVelocity(int difficulty) {
-        fallVelocity = difficulty;
+    public static void setDifficulty(String difficulty) {
+        if (difficulty.equals("EASY")) {
+            fallVelocity = 100;
+            mDifficulty = EASY;
+
+        } else if (difficulty.equals("NORMAL")) {
+            fallVelocity = 50;
+            mDifficulty = NORMAL;
+
+        } else if (difficulty.equals("HARD")) {
+            fallVelocity = 30;
+            mDifficulty = HARD;
+
+        }
     }
 
     public void initGame() {
@@ -356,14 +397,15 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         return false;
     }
 
-
-
     public Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            Log.v("msg.obj", Integer.toString(msg.what));
-            score += msg.what;
-            scoreText.setText(String.valueOf(score));
+            switch (msg.what) {
+                default:
+                score += msg.what;
+                scoreText.setText("Score: " + String.valueOf(score));
+                break;
+            }
         }
     };
 }

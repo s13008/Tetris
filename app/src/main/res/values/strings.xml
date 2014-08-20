@@ -12,5 +12,7 @@
     <string name="title_activity_result">ResultActivity</string>
     <string name="text_gameover">GAME OVER</string>
     <string name="text_score">Score:</string>
+    <string name="text_retry">Retry</string>
+    <string name="text_end">End</string>
 
 </resources>
