@@ -1,11 +1,9 @@
 package jp.ac.it_college.std.s13012.androidchallenge;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 
 public class TetrisActivity extends Activity{
@@ -28,6 +26,7 @@ public class TetrisActivity extends Activity{
             Block.setFallVelocity(30);
         }
         Log.v("Difficulty", getIntent().getStringExtra("Difficulty"));
+
     }
 
 

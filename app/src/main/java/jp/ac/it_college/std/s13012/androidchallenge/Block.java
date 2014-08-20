@@ -6,14 +6,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.GestureDetector;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -80,6 +79,8 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
             Color.BLUE, Color.argb(255,243,152,0),
             Color.CYAN};
     private int blockColor;
+    private TextView scoreText;
+    private int score = 0;
 
 
     public Block(Context context) {
@@ -88,6 +89,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         mHolder = getHolder();
         mHolder.addCallback(this);
         initGame();
+        scoreText = (TextView)((TetrisActivity)context).findViewById(R.id.score);
     }
 
     private void drawMatrix(int[][] matrix, int offsetx, int offsety, int color) {
@@ -147,6 +149,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
                 }
             }
             newMap[i] = newRow;
+            mHandler.sendEmptyMessage(100);
         }
         blockMap = newMap;
     }
@@ -352,4 +355,15 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     public boolean onDoubleTapEvent(MotionEvent motionEvent) {
         return false;
     }
+
+
+
+    public Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            Log.v("msg.obj", Integer.toString(msg.what));
+            score += msg.what;
+            scoreText.setText(String.valueOf(score));
+        }
+    };
 }
