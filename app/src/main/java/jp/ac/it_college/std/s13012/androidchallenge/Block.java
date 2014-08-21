@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -58,9 +57,10 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     Random mRand = new Random(System.currentTimeMillis());
 
     private int[][] block = blocks[mRand.nextInt(blocks.length)];
+    private int[][] next;
     private int mapWidth = 12;
     private int mapHeight = 21;
-    private int posx = mapWidth / 2, posy;
+    private int posx = (mapWidth / 2) - 1, posy;
     private int[][] blockMap = new int[mapHeight][];
     public final static int BLOCK_WIDTH = 45;
     public final static int BLOCK_HEIGHT = 53;
@@ -76,10 +76,11 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
             Color.MAGENTA, Color.GREEN,
             Color.BLUE, ORANGE,
             Color.CYAN};
-    private int blockColor;
+    private int blockColor = COLORS[mRand.nextInt(COLORS.length)];
+    ;
+    private int nextColor;
     private static boolean isStop = false;
     NextBlock nextBlock;
-
 
 
     public Block(Context context) {
@@ -231,7 +232,10 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        blockColor = COLORS[mRand.nextInt(COLORS.length)];
+        nextColor = COLORS[mRand.nextInt(COLORS.length)];
+        next = blocks[mRand.nextInt(blocks.length)];
+        nextBlock.setNext(next, nextColor);
+        NextBlock.loopFlagReversal();
         frame = 0;
         mIsAttached = true;
         mThread = new Thread(this);
@@ -269,6 +273,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
                 getHolder().unlockCanvasAndPost(mCanvas);
                 if (gameOver()) {
                     Intent intent = new Intent(getContext(), ResultActivity.class);
+                    intent.putExtra("scoreResult", NextBlock.score);
                     getContext().startActivity(intent);
                 }
             }
@@ -281,10 +286,14 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         } else {
             mergeMatrix(block, posx, posy);
             clearRows();
-            posx = mapWidth / 2;
+            posx = (mapWidth / 2) - 1;
             posy = 0;
-            block = blocks[mRand.nextInt(blocks.length)];
-            blockColor = COLORS[mRand.nextInt(COLORS.length)];
+            block = next;
+            blockColor = nextColor;
+            next = blocks[mRand.nextInt(blocks.length)];
+            nextColor = COLORS[mRand.nextInt(COLORS.length)];
+            nextBlock.setNext(next, nextColor);
+            NextBlock.loopFlagReversal();
         }
     }
 
@@ -305,7 +314,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         }
     }
 
-    public static void stopLoop() {
+    public static void loopFlagReversal() {
         isStop = !isStop;
     }
 

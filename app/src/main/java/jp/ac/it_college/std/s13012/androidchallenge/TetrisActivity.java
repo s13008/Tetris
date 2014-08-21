@@ -8,15 +8,15 @@ import android.view.KeyEvent;
 import android.widget.LinearLayout;
 
 
-public class TetrisActivity extends Activity{
+public class TetrisActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tetris);
-        LinearLayout mainLayout = (LinearLayout)findViewById(R.id.game_layout);
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.game_layout);
         mainLayout.addView(new Block(this));
-        LinearLayout subLayout = (LinearLayout)findViewById(R.id.sub_layout);
+        LinearLayout subLayout = (LinearLayout) findViewById(R.id.sub_layout);
         subLayout.addView(new NextBlock(this));
 
 
@@ -37,7 +37,7 @@ public class TetrisActivity extends Activity{
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == event.KEYCODE_BACK) {
-            Block.stopLoop();
+            Block.loopFlagReversal();
             new AlertDialog.Builder(this)
                     .setCancelable(false)
                     .setTitle("終了の確認")
@@ -46,7 +46,7 @@ public class TetrisActivity extends Activity{
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    Block.stopLoop();
+                                    Block.loopFlagReversal();
                                     finish();
                                 }
                             }
@@ -55,7 +55,7 @@ public class TetrisActivity extends Activity{
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    Block.stopLoop();
+                                    Block.loopFlagReversal();
                                 }
                             }
                     )

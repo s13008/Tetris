@@ -7,7 +7,6 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,7 @@ public class MainActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
             final Button startButton = (Button) rootView.findViewById(R.id.start_button);
             startButton.setOnClickListener(new View.OnClickListener() {
@@ -40,6 +39,10 @@ public class MainActivity extends Activity {
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     ft.commit();
                     startButton.setVisibility(View.INVISIBLE);
+                    rootView.findViewById(R.id.introduction).setVisibility(View.INVISIBLE);
+                    rootView.findViewById(R.id.introduction_flick).setVisibility(View.INVISIBLE);
+                    rootView.findViewById(R.id.introduction_rotate).setVisibility(View.INVISIBLE);
+                    rootView.findViewById(R.id.introduction_doubleTap).setVisibility(View.INVISIBLE);
                 }
             });
 
@@ -75,8 +78,7 @@ public class MainActivity extends Activity {
     }
 
 
-
-    public static class DifficultyFragment extends Fragment implements View.OnClickListener{
+    public static class DifficultyFragment extends Fragment implements View.OnClickListener {
         public static DifficultyFragment newInstance() {
             DifficultyFragment fragment = new DifficultyFragment();
             return fragment;
@@ -101,9 +103,9 @@ public class MainActivity extends Activity {
 
         @Override
         public void onClick(View view) {
-            switch (view.getId()){
+            switch (view.getId()) {
                 case R.id.easy_button:
-                 difficultySelect("EASY");
+                    difficultySelect("EASY");
                     break;
                 case R.id.normal_button:
                     difficultySelect("NORMAL");
