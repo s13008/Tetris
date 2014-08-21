@@ -5,10 +5,11 @@ import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.View;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.widget.TextView;
 
-public class Score extends View{
+public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Runnable{
     public static int mDifficulty;
     private TextView scoreText;
     private int score = 0;
@@ -18,13 +19,22 @@ public class Score extends View{
     public static final int EASY_SCORE = 100;
     public static final int NORMAL_SCORE = 200;
     public static final int HARD_SCORE = 300;
-    private int[][] nextBlock;
     private static final int NEXT_BLOCK = 3;
+    private int[][] nextBlock;
+    private int nextBlockColor;
+    protected static Thread mThread;
+    private SurfaceHolder mHolder;
+    public static boolean mIsAttached;
+    private Canvas mCanvas = null;
+    private static boolean isStop = false;
 
-    public Score(Context context) {
+
+    public NextBlock(Context context) {
         super(context);
         scoreText = (TextView)((TetrisActivity)context).findViewById(R.id.score);
         mHandler.sendEmptyMessage(0);
+        mHolder = getHolder();
+        mHolder.addCallback(this);
     }
 
     public static void setDifficulty(String difficulty) {
@@ -36,7 +46,6 @@ public class Score extends View{
 
         } else if (difficulty.equals("HARD")) {
             mDifficulty = HARD;
-
         }
     }
 
@@ -70,7 +79,36 @@ public class Score extends View{
     };
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        mIsAttached = true;
+        mThread = new Thread(this);
+        mThread.start();
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+        mIsAttached = false;
+        while (mThread.isAlive());
+    }
+
+    @Override
+    public void run() {
+
+    }
+
+    public static void finishLoop() {
+        synchronized (mThread) {
+            mIsAttached = false;
+        }
+
+        try {
+            mThread.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

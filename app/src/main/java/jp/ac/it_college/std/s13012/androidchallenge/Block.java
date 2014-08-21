@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -61,8 +62,8 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     private int mapHeight = 21;
     private int posx = mapWidth / 2, posy;
     private int[][] blockMap = new int[mapHeight][];
-    private final static int BLOCK_WIDTH = 45;
-    private final static int BLOCK_HEIGHT = 53;
+    public final static int BLOCK_WIDTH = 45;
+    public final static int BLOCK_HEIGHT = 53;
     private GestureDetector gestureDetector;
     protected static Thread mThread;
     private SurfaceHolder mHolder;
@@ -70,14 +71,14 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     private Canvas mCanvas = null;
     public static int fallVelocity;
     public static int frame;
-    private int ORANGE = Color.rgb(243, 152, 0);
-    private final int[] COLORS = {Color.RED, Color.YELLOW,
+    private static final int ORANGE = Color.rgb(243, 152, 0);
+    private static final int[] COLORS = {Color.RED, Color.YELLOW,
             Color.MAGENTA, Color.GREEN,
             Color.BLUE, ORANGE,
             Color.CYAN};
     private int blockColor;
     private static boolean isStop = false;
-    Score score;
+    NextBlock nextBlock;
 
 
 
@@ -87,7 +88,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         mHolder = getHolder();
         mHolder.addCallback(this);
         initGame();
-        score = new Score(context);
+        nextBlock = new NextBlock(context);
     }
 
     private void drawMatrix(Canvas canvas, int[][] matrix, int offsetx, int offsety, int color) {
@@ -147,7 +148,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
                 }
             }
             newMap[i] = newRow;
-            score.setScore(Score.mDifficulty);
+            nextBlock.setScore(NextBlock.mDifficulty);
         }
         blockMap = newMap;
     }
@@ -318,8 +319,6 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-
-
     }
 
     public static void setFallVelocity(String difficulty) {

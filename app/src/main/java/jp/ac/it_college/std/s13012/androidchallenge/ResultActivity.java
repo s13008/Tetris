@@ -16,7 +16,6 @@ public class ResultActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_result);
         findViewById(R.id.retry_button).setOnClickListener(this);
         findViewById(R.id.end_button).setOnClickListener(this);
-
     }
 
     @Override

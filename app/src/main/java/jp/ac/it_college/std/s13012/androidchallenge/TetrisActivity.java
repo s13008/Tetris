@@ -17,20 +17,20 @@ public class TetrisActivity extends Activity{
         LinearLayout mainLayout = (LinearLayout)findViewById(R.id.game_layout);
         mainLayout.addView(new Block(this));
         LinearLayout subLayout = (LinearLayout)findViewById(R.id.sub_layout);
-        subLayout.addView(new Score(this));
+        subLayout.addView(new NextBlock(this));
 
 
         //難易度によってブロックの落下速度を調整
         String difficulty = getIntent().getStringExtra("Difficulty");
         if (difficulty.equals("EASY")) {
             Block.setFallVelocity("EASY");
-            Score.setDifficulty("EASY");
+            NextBlock.setDifficulty("EASY");
         } else if (difficulty.equals("NORMAL")) {
             Block.setFallVelocity("NORMAL");
-            Score.setDifficulty("NORMAL");
+            NextBlock.setDifficulty("NORMAL");
         } else if (difficulty.equals("HARD")) {
             Block.setFallVelocity("HARD");
-            Score.setDifficulty("HARD");
+            NextBlock.setDifficulty("HARD");
         }
     }
 
@@ -68,9 +68,10 @@ public class TetrisActivity extends Activity{
 
     @Override
     protected void onPause() {
-        //Blockクラスのスレッドを停止
+        //スレッドを停止
         super.onPause();
         Block.finishLoop();
+        NextBlock.finishLoop();
     }
 
 
