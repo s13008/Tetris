@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
 
@@ -18,16 +16,21 @@ public class TetrisActivity extends Activity{
         setContentView(R.layout.activity_tetris);
         LinearLayout mainLayout = (LinearLayout)findViewById(R.id.game_layout);
         mainLayout.addView(new Block(this));
+        LinearLayout subLayout = (LinearLayout)findViewById(R.id.sub_layout);
+        subLayout.addView(new Score(this));
 
 
         //難易度によってブロックの落下速度を調整
         String difficulty = getIntent().getStringExtra("Difficulty");
         if (difficulty.equals("EASY")) {
-            Block.setDifficulty("EASY");
+            Block.setFallVelocity("EASY");
+            Score.setDifficulty("EASY");
         } else if (difficulty.equals("NORMAL")) {
-            Block.setDifficulty("NORMAL");
+            Block.setFallVelocity("NORMAL");
+            Score.setDifficulty("NORMAL");
         } else if (difficulty.equals("HARD")) {
-            Block.setDifficulty("HARD");
+            Block.setFallVelocity("HARD");
+            Score.setDifficulty("HARD");
         }
     }
 
