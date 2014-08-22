@@ -14,10 +14,10 @@
     <string name="text_score">Score:</string>
     <string name="text_retry">RETRY</string>
     <string name="text_end">END</string>
-    <string name="text_next">NEXT</string>
     <string name="text_introduction">操作方法</string>
     <string name="text_introduction_flick">フリック: ブロック移動</string>
     <string name="text_introduction_rotate">プレス: ブロック回転</string>
     <string name="text_introduction_doubleTap">ダブルタップ: ブロック落下</string>
+    <string name="text_next">NEXT</string>
 
 </resources>

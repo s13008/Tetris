@@ -14,6 +14,7 @@ import android.widget.TextView;
 public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Runnable {
     public static int mDifficulty;
     private TextView scoreText;
+    private TextView nextText;
     public static int score = 0;
     private static final int EASY = 0;
     private static final int NORMAL = 1;
