@@ -26,15 +26,16 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
     public static final int NORMAL_SCORE = 200;
     public static final int HARD_SCORE = 300;
     private static int[][] nextBlock;
+    private static int[][] nextBlock2;
     private static int nextBlockColor;
+    private static int NextBlockColor2;
     protected static Thread mThread;
     private SurfaceHolder mHolder;
     public static boolean mIsAttached;
     private Canvas mCanvas = null;
     private static boolean isStop = true;
     private static final String Tag = "Log";
-    private int count = 0;
-    QueueNext nextList = new QueueNext();
+    Block block;
 
     //TODO
     public NextBlock(Context context) {
@@ -104,7 +105,7 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
             if (!isStop) {
                 mCanvas = getHolder().lockCanvas();
                 mCanvas.drawColor(Color.WHITE);
-                drawMatrix(mCanvas, nextBlock, nextBlockColor);
+                drawMatrix(mCanvas, nextBlock, nextBlockColor, nextBlock2, NextBlockColor2);
                 getHolder().unlockCanvasAndPost(mCanvas);
             }
         }
@@ -127,20 +128,25 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
     }
 
     //TODO Queue NextBlock生成
-    public void setNext(int[][] nextBlock, int nextBlockColor) {
+    public void setNext(int[][] nextBlock, int nextBlockColor, int[][] nextBlock2, int nextBlockColor2) {
         this.nextBlock = nextBlock;
         this.nextBlockColor = nextBlockColor;
+        this.nextBlock2 = nextBlock2;
+        this.NextBlockColor2 = nextBlockColor2;
     }
 
 
 
 
-    private void drawMatrix(Canvas canvas, int[][] matrix, int color) {
+    private void drawMatrix(Canvas canvas, int[][] matrix,  int color, int[][] matrix2, int color2) {
         ShapeDrawable rect = new ShapeDrawable(new RectShape());
         rect.getPaint().setColor(color);
 
         int h = matrix.length;
         int w = matrix[0].length;
+
+        int h2 =  matrix2.length;
+        int w2 =  matrix2[0].length;
 
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
@@ -149,6 +155,21 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
                     int py = y * Block.BLOCK_HEIGHT;
                     rect.setBounds(px, py, px + Block.BLOCK_WIDTH, py + Block.BLOCK_HEIGHT);
                     rect.draw(canvas);
+                }
+            }
+        }
+        //TODO NEXTBLOCK２描画
+        ShapeDrawable rect2 = new ShapeDrawable(new RectShape());
+        rect2.getPaint().setColor(color2);
+        for(int y = 0; y < h2; y++) {
+            for (int x = 0; x < w2; x++) {
+                if (matrix2[y][x] != 0) {
+                    int px = x * Block.BLOCK_WIDTH;
+                    int py = y * Block.BLOCK_HEIGHT + Block.BLOCK_HEIGHT;
+                    canvas.translate(0, 300);
+                    //TODO コピーしないで実装
+                    rect2.setBounds(px, py, px + Block.BLOCK_WIDTH, py + Block.BLOCK_HEIGHT);
+                    rect2.draw(canvas);
                 }
             }
         }
