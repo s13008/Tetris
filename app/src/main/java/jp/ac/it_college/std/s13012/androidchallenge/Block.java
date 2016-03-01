@@ -6,16 +6,33 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
+import android.media.AudioManager;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.util.Log;
+import android.media.SoundPool;
+import android.media.MediaPlayer;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
-
 
 public class Block extends SurfaceView implements GestureDetector.OnGestureListener,
         SurfaceHolder.Callback, Runnable, GestureDetector.OnDoubleTapListener {
+
+    //SE, BGMの実装
+    private SoundPool se;
+    private MediaPlayer bgm;
+
+    private int bgmSoundId;
+    private int seSoundId;
+
+
     int[][][] blocks = {
             {
                     {1, 1},
@@ -54,10 +71,14 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
             }
     };
 
+
+
+
     Random mRand = new Random(System.currentTimeMillis());
 
     private int[][] block = blocks[mRand.nextInt(blocks.length)];
     private int[][] next;
+    int[][] start;
     private int mapWidth = 12;
     private int mapHeight = 21;
     private int posx = (mapWidth / 2) - 1, posy;
@@ -81,6 +102,10 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     private int nextColor;
     private static boolean isStop = false;
     NextBlock nextBlock;
+    QueueNext nextList = new QueueNext();
+    QueueNext isColorList = new QueueNext();
+    //private static int[][] start;
+    //TODO
 
 
     public Block(Context context) {
@@ -89,6 +114,8 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         mHolder = getHolder();
         mHolder.addCallback(this);
         initGame();
+        se = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        seSoundId = se.load(getContext(), R.raw.drum02, 1);
         nextBlock = new NextBlock(context);
     }
 
@@ -112,18 +139,22 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     }
 
     void clearRows() {
+        //se = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        //seSoundId = se.load(getContext(), R.raw.drum02, 0);
         // 埋まった行は消す。nullで一旦マーキング
         for (int y = 0; y < mapHeight - 1; y++) {
             boolean full = true;
             for (int x = 1; x < mapWidth - 1; x++) {
                 if (blockMap[y][x] == 0) {
                     full = false;
+                    se.play(seSoundId, 100, 100, 0, 0, 1.0f);
                     break;
                 }
             }
 
             if (full) {
                 blockMap[y] = null;
+                //se.play(seSoundId, 100, 100, 0, 0, 1.0f);
             }
         }
 
@@ -229,13 +260,23 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         return true;
     }
 
-
+    //TODO  ランダムにBLOCK生成
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         nextColor = COLORS[mRand.nextInt(COLORS.length)];
         next = blocks[mRand.nextInt(blocks.length)];
+        Log.v("next", String.valueOf(next));
+/*
+        for (int i = 0; i < 2; i++){
+            next = blocks[mRand.nextInt(blocks.length)];
+            nextColor = COLORS[mRand.nextInt(COLORS.length)];
+            Log.v("size", String.valueOf(nextList.size()));
+        }
+*/
         nextBlock.setNext(next, nextColor);
         NextBlock.loopFlagReversal();
+
+
         frame = 0;
         mIsAttached = true;
         mThread = new Thread(this);
@@ -254,31 +295,35 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
 
     }
 
+    //TODO GAMEスレッド
 
     @Override
     public void run() {
-        while (mIsAttached) {
-            if (!isStop) {
-                mCanvas = getHolder().lockCanvas();
-                mCanvas.drawColor(Color.BLACK);
+            while (mIsAttached) {
+                if (!isStop) {
+                    mCanvas = getHolder().lockCanvas();
+                    mCanvas.drawColor(Color.BLACK);
 
-                drawMatrix(mCanvas, block, posx, posy, blockColor);
-                drawMatrix(mCanvas, blockMap, 0, 0, Color.GRAY);
+                    drawMatrix(mCanvas, block, posx, posy, blockColor);
+                    drawMatrix(mCanvas, blockMap, 0, 0,Color.GRAY);
 
-                if (frame % fallVelocity == 0) {
-                    dropBlock();
-                }
+                    if (frame % fallVelocity == 0) {
+                        dropBlock();
+                    }
 
-                frame++;
-                getHolder().unlockCanvasAndPost(mCanvas);
-                if (gameOver()) {
-                    Intent intent = new Intent(getContext(), ResultActivity.class);
-                    intent.putExtra("scoreResult", NextBlock.score);
-                    getContext().startActivity(intent);
+                    frame++;
+                    getHolder().unlockCanvasAndPost(mCanvas);
+                    if (gameOver()) {
+                        Intent intent = new Intent(getContext(), ResultActivity.class);
+                        intent.putExtra("scoreResult", NextBlock.score);
+                        getContext().startActivity(intent);
+                    }
                 }
             }
-        }
+
     }
+
+    //TODO BLOCK落下
 
     public void dropBlock() {
         if (check(block, posx, posy + 1)) {
@@ -292,10 +337,18 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
             blockColor = nextColor;
             next = blocks[mRand.nextInt(blocks.length)];
             nextColor = COLORS[mRand.nextInt(COLORS.length)];
+
             nextBlock.setNext(next, nextColor);
             NextBlock.loopFlagReversal();
+
         }
+        Log.v("Log", "dropBlock()");
     }
+
+
+
+
+
 
     public boolean gameOver() {
         if (posy == 0 && !check(block, posx, posy)) {
@@ -318,6 +371,8 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
         isStop = !isStop;
     }
 
+    //TODO
+
     public static void finishLoop() {
         synchronized (mThread) {
             mIsAttached = false;
@@ -332,7 +387,7 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
 
     public static void setFallVelocity(String difficulty) {
         if (difficulty.equals("EASY")) {
-            fallVelocity = 100;
+            fallVelocity = 80;
 
         } else if (difficulty.equals("NORMAL")) {
             fallVelocity = 50;
@@ -379,5 +434,4 @@ public class Block extends SurfaceView implements GestureDetector.OnGestureListe
     public boolean onDoubleTapEvent(MotionEvent motionEvent) {
         return false;
     }
-
 }

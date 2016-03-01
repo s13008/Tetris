@@ -9,7 +9,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.TextView;
+import android.util.Log;
+
+import java.lang.reflect.Array;
 
 public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Runnable {
     public static int mDifficulty;
@@ -28,8 +32,11 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
     public static boolean mIsAttached;
     private Canvas mCanvas = null;
     private static boolean isStop = true;
+    private static final String Tag = "Log";
+    private int count = 0;
+    QueueNext nextList = new QueueNext();
 
-
+    //TODO
     public NextBlock(Context context) {
         super(context);
         scoreText = (TextView) ((TetrisActivity) context).findViewById(R.id.score);
@@ -39,6 +46,7 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
     }
 
     public static void setDifficulty(String difficulty) {
+        Log.v(Tag,difficulty);
         if (difficulty.equals("EASY")) {
             mDifficulty = EASY;
 
@@ -89,15 +97,15 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
         while (mThread.isAlive()) ;
     }
 
+//// TODO: 16/02/22  NextBlockを2つ作る。
     @Override
     public void run() {
         while (mIsAttached) {
             if (!isStop) {
                 mCanvas = getHolder().lockCanvas();
-                mCanvas.drawColor(Color.BLACK);
+                mCanvas.drawColor(Color.WHITE);
                 drawMatrix(mCanvas, nextBlock, nextBlockColor);
                 getHolder().unlockCanvasAndPost(mCanvas);
-                isStop = !isStop;
             }
         }
     }
@@ -118,10 +126,14 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
         }
     }
 
+    //TODO Queue NextBlock生成
     public void setNext(int[][] nextBlock, int nextBlockColor) {
         this.nextBlock = nextBlock;
         this.nextBlockColor = nextBlockColor;
     }
+
+
+
 
     private void drawMatrix(Canvas canvas, int[][] matrix, int color) {
         ShapeDrawable rect = new ShapeDrawable(new RectShape());

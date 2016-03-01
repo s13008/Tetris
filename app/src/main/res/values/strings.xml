@@ -19,5 +19,6 @@
     <string name="text_introduction_rotate">プレス: ブロック回転</string>
     <string name="text_introduction_doubleTap">ダブルタップ: ブロック落下</string>
     <string name="text_next">NEXT</string>
+    <string name="button1">||</string>
 
 </resources>

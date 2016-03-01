@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
-
+import android.util.Log;
 
 public class ResultActivity extends Activity implements View.OnClickListener {
 
