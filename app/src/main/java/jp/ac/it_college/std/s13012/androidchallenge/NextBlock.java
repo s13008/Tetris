@@ -106,7 +106,8 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
                 mCanvas = getHolder().lockCanvas();
                 mCanvas.drawColor(Color.WHITE);
                 drawMatrix(mCanvas, nextBlock, nextBlockColor);
-                drawMatrix2(mCanvas, nextBlock2, nextBlockColor2);
+                mCanvas.translate(0, 200);
+                drawMatrix(mCanvas, nextBlock2, nextBlockColor2);
                 getHolder().unlockCanvasAndPost(mCanvas);
             }
         }
@@ -148,32 +149,6 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
 
         int h2 = matrix.length;
         int w2 = matrix[0].length;
-
-
-        for (int y = 0; y < h; y++) {
-            for (int x = 0; x < w; x++) {
-                if (matrix[y][x] != 0) {
-                    int px = x * Block.BLOCK_WIDTH;
-                    int py = y * Block.BLOCK_HEIGHT;
-                    rect.setBounds(px, py, px + Block.BLOCK_WIDTH, py + Block.BLOCK_HEIGHT);
-                    rect.draw(canvas);
-                }
-            }
-        }
-    }
-
-    private void drawMatrix2(Canvas canvas, int[][] matrix,  int color) {
-        ShapeDrawable rect = new ShapeDrawable(new RectShape());
-        rect.getPaint().setColor(color);
-
-        int h = matrix.length;
-        int w = matrix[0].length;
-
-        int h2 = matrix.length;
-        int w2 = matrix[0].length;
-
-
-        mCanvas.translate(0, 200);
 
 
         for (int y = 0; y < h; y++) {
