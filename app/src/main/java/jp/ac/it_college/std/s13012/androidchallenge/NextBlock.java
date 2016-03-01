@@ -28,7 +28,7 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
     private static int[][] nextBlock;
     private static int[][] nextBlock2;
     private static int nextBlockColor;
-    private static int NextBlockColor2;
+    private static int nextBlockColor2;
     protected static Thread mThread;
     private SurfaceHolder mHolder;
     public static boolean mIsAttached;
@@ -105,7 +105,8 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
             if (!isStop) {
                 mCanvas = getHolder().lockCanvas();
                 mCanvas.drawColor(Color.WHITE);
-                drawMatrix(mCanvas, nextBlock, nextBlockColor, nextBlock2, NextBlockColor2);
+                drawMatrix(mCanvas, nextBlock, nextBlockColor);
+                drawMatrix2(mCanvas, nextBlock2, nextBlockColor2);
                 getHolder().unlockCanvasAndPost(mCanvas);
             }
         }
@@ -132,21 +133,22 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
         this.nextBlock = nextBlock;
         this.nextBlockColor = nextBlockColor;
         this.nextBlock2 = nextBlock2;
-        this.NextBlockColor2 = nextBlockColor2;
+        this.nextBlockColor2 = nextBlockColor2;
     }
 
 
 
 
-    private void drawMatrix(Canvas canvas, int[][] matrix,  int color, int[][] matrix2, int color2) {
+    private void drawMatrix(Canvas canvas, int[][] matrix,  int color) {
         ShapeDrawable rect = new ShapeDrawable(new RectShape());
         rect.getPaint().setColor(color);
 
         int h = matrix.length;
         int w = matrix[0].length;
 
-        int h2 =  matrix2.length;
-        int w2 =  matrix2[0].length;
+        int h2 = matrix.length;
+        int w2 = matrix[0].length;
+
 
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
@@ -158,20 +160,32 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
                 }
             }
         }
-        //TODO NEXTBLOCK２描画
-        ShapeDrawable rect2 = new ShapeDrawable(new RectShape());
-        rect2.getPaint().setColor(color2);
-        for(int y = 0; y < h2; y++) {
-            for (int x = 0; x < w2; x++) {
-                if (matrix2[y][x] != 0) {
+    }
+
+    private void drawMatrix2(Canvas canvas, int[][] matrix,  int color) {
+        ShapeDrawable rect = new ShapeDrawable(new RectShape());
+        rect.getPaint().setColor(color);
+
+        int h = matrix.length;
+        int w = matrix[0].length;
+
+        int h2 = matrix.length;
+        int w2 = matrix[0].length;
+
+
+        mCanvas.translate(0, 200);
+
+
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                if (matrix[y][x] != 0) {
                     int px = x * Block.BLOCK_WIDTH;
-                    int py = y * Block.BLOCK_HEIGHT + Block.BLOCK_HEIGHT;
-                    canvas.translate(0, 300);
-                    //TODO コピーしないで実装
-                    rect2.setBounds(px, py, px + Block.BLOCK_WIDTH, py + Block.BLOCK_HEIGHT);
-                    rect2.draw(canvas);
+                    int py = y * Block.BLOCK_HEIGHT;
+                    rect.setBounds(px, py, px + Block.BLOCK_WIDTH, py + Block.BLOCK_HEIGHT);
+                    rect.draw(canvas);
                 }
             }
         }
     }
+
 }
