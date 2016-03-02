@@ -9,11 +9,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.widget.TextView;
 import android.util.Log;
 
-import java.lang.reflect.Array;
 
 public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Runnable {
     public static int mDifficulty;
@@ -27,8 +25,10 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
     public static final int HARD_SCORE = 300;
     private static int[][] nextBlock;
     private static int[][] nextBlock2;
+    private static int[][] nextBlock3;
     private static int nextBlockColor;
     private static int nextBlockColor2;
+    private static int nextBlockColor3;
     protected static Thread mThread;
     private SurfaceHolder mHolder;
     public static boolean mIsAttached;
@@ -106,8 +106,10 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
                 mCanvas = getHolder().lockCanvas();
                 mCanvas.drawColor(Color.WHITE);
                 drawMatrix(mCanvas, nextBlock, nextBlockColor);
-                mCanvas.translate(0, 200);
+                mCanvas.translate(0, 250);
                 drawMatrix(mCanvas, nextBlock2, nextBlockColor2);
+                mCanvas.translate(0, 250);
+                drawMatrix(mCanvas, nextBlock3, nextBlockColor3);
                 getHolder().unlockCanvasAndPost(mCanvas);
             }
         }
@@ -130,11 +132,14 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
     }
 
     //TODO Queue NextBlock生成
-    public void setNext(int[][] nextBlock, int nextBlockColor, int[][] nextBlock2, int nextBlockColor2) {
+    public void setNext(int[][] nextBlock, int nextBlockColor, int[][] nextBlock2, int nextBlockColor2,int[][] nextBlock3, int nextBlockColor3) {
         this.nextBlock = nextBlock;
         this.nextBlockColor = nextBlockColor;
         this.nextBlock2 = nextBlock2;
         this.nextBlockColor2 = nextBlockColor2;
+        this.nextBlock3 = nextBlock3;
+        this.nextBlockColor3 = nextBlockColor3;
+
     }
 
 
@@ -146,10 +151,6 @@ public class NextBlock extends SurfaceView implements SurfaceHolder.Callback, Ru
 
         int h = matrix.length;
         int w = matrix[0].length;
-
-        int h2 = matrix.length;
-        int w2 = matrix[0].length;
-
 
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
